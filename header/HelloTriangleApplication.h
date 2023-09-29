@@ -2,8 +2,11 @@
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+#include <algorithm> // Necessary for std::clamp
 #include <iostream>
 #include <optional>
+#include <cstdint> // Necessary for uint32_t
+#include <limits> // Necessary for std::numeric_limits
 #include <format>
 #include <vector>
 #include <set>
@@ -21,6 +24,13 @@ struct QueueFamilyIndices
     }
 };
 
+struct SwapChainSupportDetails
+{
+    VkSurfaceCapabilitiesKHR        capabilities;
+    std::vector<VkSurfaceFormatKHR> formats;
+    std::vector<VkPresentModeKHR>   presentModes;
+};
+
 class HelloTriangleApplication
 {
 public:
@@ -33,7 +43,7 @@ private:
     VkInstance          instance {};
     // This debug messenger is create with a valid instance and destroyed before the instance is destroyed
     VkDebugUtilsMessengerEXT debugMessenger{};
-    VkSurfaceKHR            surface;
+    VkSurfaceKHR             surface{};
 
     VkPhysicalDevice    physicalDevice = VK_NULL_HANDLE;
     VkDevice            device {}; // logical device
@@ -54,6 +64,10 @@ private:
     bool checkDeviceExtensionSupport(VkPhysicalDevice device);
     bool isDeviceSuitable(VkPhysicalDevice device);
     QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
+    SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device);
+    VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+    VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
+    VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 
     // Custom debug message callback function
     static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
@@ -67,5 +81,6 @@ private:
     void createSurface();
     void pickPhysicalDevice();
     void createLogicalDevice();
+    void createSwapChain();
 };
 
