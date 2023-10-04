@@ -56,6 +56,8 @@ private:
     VkFormat             swapChainImageFormat{};
     VkExtent2D           swapChainExtent{};
 
+    std::vector<VkImageView> swapChainImageViews;
+
 
     void initWindow();
     void initVulkan();
@@ -87,5 +89,6 @@ private:
     void pickPhysicalDevice();
     void createLogicalDevice();
     void createSwapChain();
+    void createImageViews();
 };
 
