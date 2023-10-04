@@ -31,11 +31,11 @@ struct SwapChainSupportDetails
     std::vector<VkPresentModeKHR>   presentModes;
 };
 
-class HelloTriangleApplication
+class Engine
 {
 public:
-    HelloTriangleApplication();
-    ~HelloTriangleApplication();
+    Engine();
+    ~Engine();
     void run();
 private:
     GLFWwindow*         window  {};
