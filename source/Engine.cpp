@@ -1,16 +1,16 @@
-#include "HelloTriangleApplication.h"
+#include "Engine.h"
 #include "DebugUtilsMessengerAndOtherHelper.h"
 
-HelloTriangleApplication::HelloTriangleApplication()
+Engine::Engine()
 {
     window = nullptr;
 }
 
-HelloTriangleApplication::~HelloTriangleApplication()
+Engine::~Engine()
 {
 }
 
-void HelloTriangleApplication::run()
+void Engine::run()
 {
     initWindow();
     initVulkan();
@@ -18,7 +18,7 @@ void HelloTriangleApplication::run()
     cleanUp();
 }
 
-void HelloTriangleApplication::initWindow()
+void Engine::initWindow()
 {
     glfwInit();
 
@@ -28,7 +28,7 @@ void HelloTriangleApplication::initWindow()
     window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan: Hello Triangle!", nullptr, nullptr);
 }
 
-void HelloTriangleApplication::initVulkan()
+void Engine::initVulkan()
 {
     createInstance();
     setupDebugMessenger();
@@ -39,7 +39,7 @@ void HelloTriangleApplication::initVulkan()
     createImageViews();
 }
 
-void HelloTriangleApplication::mainLoop()
+void Engine::mainLoop()
 {
     while (!glfwWindowShouldClose(window))
     {
@@ -47,7 +47,7 @@ void HelloTriangleApplication::mainLoop()
     }
 }
 
-void HelloTriangleApplication::cleanUp()
+void Engine::cleanUp()
 {
     for (auto imageView : swapChainImageViews)
     {
@@ -70,7 +70,7 @@ void HelloTriangleApplication::cleanUp()
     glfwTerminate();
 }
 
-std::vector<const char*> HelloTriangleApplication::getRequiredExtensions()
+std::vector<const char*> Engine::getRequiredExtensions()
 {
     uint32_t glfwExtensionCount = 0;
     const char** glfwExtensions;
@@ -85,7 +85,7 @@ std::vector<const char*> HelloTriangleApplication::getRequiredExtensions()
     return extensions;
 }
 
-void HelloTriangleApplication::checkRequiredExtensionsSupport(std::vector<const char*>& requiredExtensions)
+void Engine::checkRequiredExtensionsSupport(std::vector<const char*>& requiredExtensions)
 {
     uint32_t supportedExtensionCount = 0;
     uint32_t requiredExtensionsCount = static_cast<uint32_t>(requiredExtensions.size());
@@ -119,7 +119,7 @@ void HelloTriangleApplication::checkRequiredExtensionsSupport(std::vector<const 
     }
 }
 
-void HelloTriangleApplication::checkValidationLayerSupport()
+void Engine::checkValidationLayerSupport()
 {
     print("Validation Layer Check\n");
 
@@ -153,7 +153,7 @@ void HelloTriangleApplication::checkValidationLayerSupport()
     }
 }
 
-bool HelloTriangleApplication::checkDeviceExtensionSupport(VkPhysicalDevice device)
+bool Engine::checkDeviceExtensionSupport(VkPhysicalDevice device)
 {
     uint32_t extensionCount;
     vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
@@ -173,7 +173,7 @@ bool HelloTriangleApplication::checkDeviceExtensionSupport(VkPhysicalDevice devi
     return requiredExtensions.empty();
 }
 
-bool HelloTriangleApplication::isDeviceSuitable(VkPhysicalDevice device)
+bool Engine::isDeviceSuitable(VkPhysicalDevice device)
 {
     VkPhysicalDeviceProperties  deviceProperties {};
     VkPhysicalDeviceFeatures    deviceFeatures {};
@@ -205,7 +205,7 @@ bool HelloTriangleApplication::isDeviceSuitable(VkPhysicalDevice device)
     return indices.isComplete() && deviceFeatures.geometryShader && extensionsSupported && swapChainAdequete;
 }
 
-QueueFamilyIndices HelloTriangleApplication::findQueueFamilies(VkPhysicalDevice device)
+QueueFamilyIndices Engine::findQueueFamilies(VkPhysicalDevice device)
 {
     QueueFamilyIndices indices;
 
@@ -241,7 +241,7 @@ QueueFamilyIndices HelloTriangleApplication::findQueueFamilies(VkPhysicalDevice 
     return indices;
 }
 
-SwapChainSupportDetails HelloTriangleApplication::querySwapChainSupport(VkPhysicalDevice device)
+SwapChainSupportDetails Engine::querySwapChainSupport(VkPhysicalDevice device)
 {
     SwapChainSupportDetails details {};
 
@@ -269,7 +269,7 @@ SwapChainSupportDetails HelloTriangleApplication::querySwapChainSupport(VkPhysic
     return details;
 }
 
-VkSurfaceFormatKHR HelloTriangleApplication::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
+VkSurfaceFormatKHR Engine::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
 {
     for (const auto& availFmt : availableFormats)
     {
@@ -282,7 +282,7 @@ VkSurfaceFormatKHR HelloTriangleApplication::chooseSwapSurfaceFormat(const std::
     return availableFormats[0];
 }
 
-VkPresentModeKHR HelloTriangleApplication::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes)
+VkPresentModeKHR Engine::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes)
 {
     for (const auto& presentMode : availablePresentModes)
     {
@@ -299,7 +299,7 @@ VkPresentModeKHR HelloTriangleApplication::chooseSwapPresentMode(const std::vect
 * The swap extent is the resolution of the swap chain images and it's almost always exactly equal to the resolution 
 * of the window that we're drawing to in pixels. 
 */
-VkExtent2D HelloTriangleApplication::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities)
+VkExtent2D Engine::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities)
 {
     if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
     {
@@ -320,7 +320,7 @@ VkExtent2D HelloTriangleApplication::chooseSwapExtent(const VkSurfaceCapabilitie
     }
 }
 
-VKAPI_ATTR VkBool32 VKAPI_CALL HelloTriangleApplication::debugCallback(
+VKAPI_ATTR VkBool32 VKAPI_CALL Engine::debugCallback(
                                         VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
                                         VkDebugUtilsMessageTypeFlagsEXT messageType,
                                         const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
@@ -333,7 +333,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL HelloTriangleApplication::debugCallback(
 }
 
 
-void HelloTriangleApplication::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
+void Engine::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
     createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
     createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
         VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
@@ -351,7 +351,7 @@ void HelloTriangleApplication::populateDebugMessengerCreateInfo(VkDebugUtilsMess
 * The instance is the connection between your application and the Vulkan library and
 * creating it involves specifying some details about your application to the driver.
 */
-void HelloTriangleApplication::createInstance()
+void Engine::createInstance()
 {
     if (enableValidationLayers) 
     {
@@ -401,7 +401,7 @@ void HelloTriangleApplication::createInstance()
     }
 }
 
-void HelloTriangleApplication::setupDebugMessenger()
+void Engine::setupDebugMessenger()
 {
     if (!enableValidationLayers) return;
 
@@ -419,7 +419,7 @@ void HelloTriangleApplication::setupDebugMessenger()
     }
 }
 
-void HelloTriangleApplication::createSurface()
+void Engine::createSurface()
 {
     if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS)
     {
@@ -431,7 +431,7 @@ void HelloTriangleApplication::createSurface()
     }
 }
 
-void HelloTriangleApplication::pickPhysicalDevice()
+void Engine::pickPhysicalDevice()
 {
     uint32_t deviceCount = 0;
     vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
@@ -458,7 +458,7 @@ void HelloTriangleApplication::pickPhysicalDevice()
     }
 }
 
-void HelloTriangleApplication::createLogicalDevice()
+void Engine::createLogicalDevice()
 {
     QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
 
@@ -522,7 +522,7 @@ void HelloTriangleApplication::createLogicalDevice()
     vkGetDeviceQueue(device, indices.presentFamily.value(), 0, &presentQueue);
 }
 
-void HelloTriangleApplication::createSwapChain()
+void Engine::createSwapChain()
 {
     SwapChainSupportDetails swapChainSupport = querySwapChainSupport(physicalDevice);
 
@@ -583,7 +583,7 @@ void HelloTriangleApplication::createSwapChain()
     swapChainExtent = extent;
 }
 
-void HelloTriangleApplication::createImageViews()
+void Engine::createImageViews()
 {
     swapChainImageViews.resize(swapChainImages.size());
     for (size_t i = 0; i < swapChainImages.size(); i++)

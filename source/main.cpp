@@ -1,13 +1,13 @@
 
 #include "TestVKSupport.h"
-#include "HelloTriangleApplication.h"
+#include "Engine.h"
 
 int runHelloTriangleApp()
 {
-    HelloTriangleApplication app;
     try
     {
-        app.run();
+        std::unique_ptr<Engine> app = std::make_unique<Engine>();
+        app->run();
         return EXIT_SUCCESS;
     }
     catch (const std::exception& e)
