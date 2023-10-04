@@ -51,6 +51,11 @@ private:
     VkQueue             graphicsQueue {};
     VkQueue             presentQueue {};
 
+    VkSwapchainKHR       swapChain{};
+    std::vector<VkImage> swapChainImages{};
+    VkFormat             swapChainImageFormat{};
+    VkExtent2D           swapChainExtent{};
+
 
     void initWindow();
     void initVulkan();
